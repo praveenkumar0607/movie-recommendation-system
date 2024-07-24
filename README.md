@@ -2,6 +2,10 @@
 
 Welcome to the Movie Recommendation System project! This project provides movie recommendations based on user input and displays the results in an interactive grid layout.
 
+#Live Demo
+
+🔗 Link - https://theasurus.pythonanywhere.com/
+
 ## Features
 
 - **Movie Search**: Users can enter a movie name to get recommendations.
