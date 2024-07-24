@@ -8,19 +8,21 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://e0.pxfuel.com/wallpapers/560/14/desktop-wallpaper-movie-collage-80s-movie-collage.jpg');
-            background-size: cover; /* Ensures the image covers the whole screen */
-            background-position: center; /* Centers the image */
-            background-attachment: fixed; /* Keeps the background image fixed */
             color: #fff; /* White text color for better readability on the background */
+            background: linear-gradient(to bottom, #87CEFA, #4682B4); /* Blue gradient background */
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 100vh;
+            overflow: auto; /* Allow scrolling for overflow */
         }
+        
         h1 {
             margin: 20px 0;
             color: #fff; /* White color for the header */
+            text-align: center;
         }
+
         form {
             display: flex;
             flex-direction: column;
@@ -33,22 +35,24 @@
             width: 100%;
             max-width: 400px; /* Increased size for the form */
         }
+
         label {
             margin-bottom: 10px;
             font-size: 16px;
             color: #fff; /* White color for the label */
         }
+
         input[type="text"] {
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 4px;
             width: 100%;
-            max-width: 100%; /* Ensures it takes full width of the form */
             box-sizing: border-box;
             margin-bottom: 10px;
             background-color: #fff; /* White background for the input field */
             color: #333; /* Dark text color for readability */
         }
+
         button {
             padding: 12px 20px;
             border: none;
@@ -59,19 +63,23 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         #recommendations {
             width: 100%;
             max-width: 1200px;
             margin-top: 20px;
         }
+
         .movie-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(5, 1fr); /* 5 columns */
             gap: 10px;
         }
+
         .movie-item {
             border: 1px solid #ddd;
             padding: 10px;
@@ -80,17 +88,67 @@
             overflow: hidden;
             background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background for movie items */
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition */
         }
+
+        .movie-item:hover {
+            transform: scale(1.05); /* Slightly enlarge the item */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4); /* Increase shadow on hover */
+        }
+
         .movie-poster {
-            width: 80%; /* Reduced size */
+            width: 100%; /* Full width */
             height: auto;
             border-radius: 4px;
             margin-bottom: 5px;
         }
+
         .movie-title {
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 18px; /* Larger font size */
             color: #333; /* Dark text color for titles */
+        }
+
+        /* Specific styles for recommendations */
+        #recommendations-content .movie-item .movie-title {
+            font-weight: bold !important; /* Bold text */
+            color: #000 !important; /* Black text color */
+        }
+
+        /* Responsive styling */
+        @media (max-width: 600px) {
+            .movie-title {
+                font-size: 16px; /* Smaller font size on smaller screens */
+            }
+
+            form {
+                width: 90%;
+            }
+
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive grid */
+            }
+        }
+
+        /* Loading spinner */
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -119,6 +177,11 @@
         </div>
         <!-- Placeholder for recommendations -->
         <div id="recommendations-content"></div>
+        <!-- Loading spinner -->
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Processing...</p>
+        </div>
     </div>
     <script>
         // Set up AJAX to include CSRF token
@@ -149,6 +212,7 @@
             // Handle form submission
             $("#movie-form").submit(function(event) {
                 event.preventDefault();
+                $("#loading").show(); // Show loading spinner
                 $.ajax({
                     url: "",
                     type: "POST",
@@ -156,9 +220,16 @@
                     success: function(data) {
                         $("#top-movies").hide(); // Hide top movies grid
                         $("#recommendations-content").html(data); // Show recommendations
+                        $("#loading").hide(); // Hide loading spinner
+                        // Ensure recommendations titles are bold and black
+                        $("#recommendations-content .movie-title").css({
+                            'font-weight': 'bold',
+                            'color': '#000'
+                        });
                     },
                     error: function(xhr, status, error) {
                         console.error("Recommendation error:", status, error);
+                        $("#loading").hide(); // Hide loading spinner even on error
                     }
                 });
             });
