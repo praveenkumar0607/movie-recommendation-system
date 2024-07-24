@@ -12,8 +12,7 @@ Welcome to the Movie Recommendation System project! This project provides movie 
 ## Technologies Used
 
 - **Frontend**: HTML, CSS, JavaScript (jQuery)
-- **Backend**: Django (Python)
-- **Autocomplete**: jQuery UI Autocomplete
+- **Backend**: Django (Python), Machine Learning techniques
 - **AJAX**: For asynchronous data fetching
 
 ## Installation
