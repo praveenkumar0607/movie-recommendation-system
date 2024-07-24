@@ -1,0 +1,13 @@
+{% if recommendations %}
+    <h2>Recommended Movies:</h2>
+    <div class="movie-grid">
+        {% for recommendation in recommendations %}
+            <div class="movie-item">
+                <img src="{{ recommendation.poster_url }}" alt="{{ recommendation.title }}" class="movie-poster">
+                <div>{{ recommendation.title }}</div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <h2>No recommendations found.</h2>
+{% endif %}
